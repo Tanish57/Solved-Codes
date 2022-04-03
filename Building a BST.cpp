@@ -1,43 +1,57 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-class node{
-    public:
-        int data;
-        node* left;
-        node* right;
+class Node {
 
-    node(int d){
-        this -> data = d;
-        this -> left = NULL;
-        this -> right = NULL;
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int d){
+        this->data = d;
+        this->left = NULL;
+        this->right = NULL;
     }
 };
 
-node* buildTree(node* root){
+Node* insertIntoBST(Node* root, int d){
+    //base case:
+    if(root == NULL){
+        root = new Node(d);
+        return root;
+    }
 
-    cout << "Enter the data :" << endl;
-    int data;
-    cin >> data;
-    root = new node(data);
-
-    if(data == -1)
-        return NULL;
-
-    cout << "Enter data for inserting in left of " << data << endl;
-    root->left = buildTree(root->left);
-    cout << "Enter data for inserting in right of " << data << endl;
-    root->right = buildTree(root->right);
+    if(d> root->data){
+        //right part me insert krna hai
+        root->right = insertIntoBST(root->right, d);
+    }
+    else{
+        //left me insert krna hai
+        root->left = insertIntoBST(root->left, d);
+    }
     return root;
 }
 
-void levelOrderTraversal(node* root){
-    queue<node*> q;
+void takeInput(Node* &root){
+
+    int data;
+    cin>>data;
+
+    while(data != -1){
+        root = insertIntoBST(root, data);
+        cin>>data;
+    }
+
+}
+
+void levelOrderTraversal(Node* root){
+    queue<Node*> q;
     q.push(root);
     q.push(NULL);   //seperator for level 0
 
     while(!q.empty()){
-        node* temp = q.front();
+        Node* temp = q.front();
         
         q.pop();
 
@@ -61,7 +75,7 @@ void levelOrderTraversal(node* root){
     }
 }
 
-void inOrder(node* root){
+void inOrder(Node* root){
     //base case:
     if(root == NULL){
         return;
@@ -71,7 +85,7 @@ void inOrder(node* root){
     cout << root->data << " ";
     inOrder(root->right);
 }
-void preOrder(node* root){
+void preOrder(Node* root){
     //base case:
     if(root == NULL){
         return;
@@ -81,7 +95,7 @@ void preOrder(node* root){
     preOrder(root->left);
     preOrder(root->right);
 }
-void postOrder(node* root){
+void postOrder(Node* root){
     //base case:
     if(root == NULL){
         return;
@@ -92,65 +106,22 @@ void postOrder(node* root){
     cout << root->data << " ";
 }
 
-void buildFromLevelOrder(node* &root){
-    queue<node*> q;
-    cout<<"Enter data for root: "<<endl;
-    int data;
-    cin >> data;
-    root = new node(data);
-    q.push(root);
-
-    while(!q.empty()){
-        node* temp = q.front();
-        q.pop();
-
-        cout<<"Enter Left node for : "<< temp->data <<endl;
-        int leftData;
-        cin >> leftData;
-
-        if(leftData != -1){
-            temp->left = new node(leftData);
-            q.push(temp->left);
-        }
-
-        cout<<"Enter right node for : "<< temp->data <<endl;
-        int rightData;
-        cin >> rightData;
-
-        if(rightData != -1){
-            temp->right = new node(rightData);
-            q.push(temp->right);
-        }
-
-    }
-}
 int main()
 {
-    node* root = NULL;
+    Node* root = NULL;
 
-    buildFromLevelOrder(root);
-    cout<<"Printing the level order traversal output "<<endl;
+    cout<<"Enter Data to create BST"<<endl;
+    takeInput(root);
+    cout<<"OUTPUT:"<<endl;
     levelOrderTraversal(root);
-    /*
-    // creating a Tree
-    root = buildTree(root);
-    // 1 3 7 -1 -1 11 -1 -1 5 17 -1 -1 -1
-
-    // level order traversal:
-    cout<<"Printing the level order traversal output "<<endl;
-    levelOrderTraversal(root);
-    cout<<endl;
-
-    cout<<"Printing inOrder traversal output: "<<endl;
+    cout<<"InOrder Traversal: "<<endl;
     inOrder(root);
     cout<<endl;
-
-    cout<<"Printing preOrder traversal output: "<<endl;
+    cout<<"preOrder Traversal: "<<endl;
     preOrder(root);
-
     cout<<endl;
-    cout<<"Printing postOrder traversal output: "<<endl;
+    cout<<"PostOrder Traversal: "<<endl;
     postOrder(root);
-    */
+    cout<<endl;
     return 0;
 }
