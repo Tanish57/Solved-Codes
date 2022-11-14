@@ -1,0 +1,161 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    Node(int d){
+	this->data = d;
+	this->next = NULL;
+    }
+
+    ~Node(){
+	int value = this->data;
+	if(this->next != NULL){
+	    next = NULL;
+	    delete next;
+	}
+	cout<<"Deleted Node with data "<<value<<endl;
+    }
+};
+
+void insertAtHead(Node* &head, int d){
+    Node* newNode = new Node(d);
+    newNode->next = head;
+    head = newNode;
+}
+
+void printLL(Node* &head){
+    Node* temp = head;
+    while(temp != NULL){
+	cout<<temp->data<<" ";
+        temp = temp->next;
+    }
+    cout<<endl;
+}
+
+void insertAtTail(Node* &tail, int d){
+    Node* newNode = new Node(d);
+    tail->next = newNode;
+    tail = newNode;
+}
+
+void insertAfter(Node* &head, int element, int d, Node* &tail){
+    if(head == NULL){
+	insertAtHead(head,d);
+    }
+    else{
+	Node* curr = head;
+	Node* last = tail;
+	while(curr->data != element){
+	    curr = curr->next;
+	}
+	if(curr == tail){
+	    insertAtTail(tail, d);
+	}
+	else{
+	    Node* newNode = new Node(d);
+	    newNode->next = curr->next;
+	    curr->next = newNode;
+	}
+    }
+}
+
+void insertAtPos(Node* &head, int pos, int d){
+}
+
+void deleteHead(Node* &head){
+    if(head == NULL){
+	cout<<"Empty List"<<endl;
+	return;
+    }
+    else{
+        Node* curr = head;
+	head = head->next;
+	curr->next = NULL;
+	delete curr;
+    }
+} 
+
+void deleteTail(Node* &head, Node* &tail){
+    Node* last = tail;
+    Node* curr = head;
+    while(curr->next != last){
+	curr = curr->next;
+    }
+   
+    tail = curr;
+    curr->next = NULL;
+    delete last;
+}
+
+void deleteNode(Node* &head, int value, Node* &tail){
+    if(head == NULL){
+	cout<<"Empty List"<<endl;
+ 	return;
+    }
+    else{
+	Node* prev = head;
+	Node* curr = head->next;
+	while(curr->data != value){
+	    prev = curr;
+	    curr = curr->next;
+	}
+	prev -> next = curr->next;
+	if(curr == head){
+	    deleteHead(head);
+	}
+	if(curr == tail){
+	    deleteTail(head, tail);
+	}
+	curr->next = NULL;
+	delete curr;
+    }
+}
+
+int main(){
+    Node* node1 = new Node(10);
+    cout<<node1->data<<endl;
+    cout<<node1->next<<endl;
+
+    Node* head = node1;
+    Node* tail = node1;
+    printLL(head);
+    
+    insertAtHead(head, 12);
+    printLL(head);
+    cout<<tail->data<<endl; 
+    insertAfter(head, 12, 13, tail);
+    printLL(head);
+    cout<<tail->data<<endl;
+
+    insertAfter(head, 13, 14, tail);
+    printLL(head);
+
+    cout<<tail->data<<endl;
+
+    deleteNode(head, 13, tail);
+    printLL(head);
+
+    cout<<tail->data<<endl;
+    deleteHead(head);
+    printLL(head);
+    cout<<tail->data<<endl;
+    insertAtTail(tail, 16);
+    cout<<tail->data<<endl;
+    insertAtTail(tail, 17);
+    cout<<tail->data<<endl;
+    printLL(head);
+
+    deleteTail(head, tail);
+    cout<<tail->data<<endl;
+    printLL(head);
+    cout<<tail->data<<endl;
+    
+    deleteNode(head, 16, tail);
+    insertAtTail(tail, 18);
+    printLL(head);
+    return 0;
+}
